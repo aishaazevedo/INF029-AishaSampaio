@@ -7,7 +7,6 @@
 #define ATUALIZACAO_ALUNO_SUCESSO -4
 #define MATRICULA_INEXISTENTE -5
 #define EXCLUSAO_ALUNO_SUCESSO -6
-#define ERRO_DESCONHECIDO -7
 
 typedef struct alu {
     int matricula;
@@ -22,6 +21,10 @@ int cadastrarAluno(Aluno listaAluno[], int qtdAluno);
 void listarAluno(Aluno listaAluno[], int qtdAluno);
 int atualizarAluno(Aluno listaAluno[], int qtdAluno);
 int excluirAluno(Aluno listaAluno[], int qtdAluno);
+
+//criar gerador automatico de matricula
+// novos atributos na struct aluno e leitura deles
+//validação da matricula
 
 int main(void) {
     Aluno listaAluno[TAM_ALUNO];
