@@ -52,6 +52,7 @@ int menuGeral() {
     printf("1 - Aluno\n");
     printf("2 - Professor\n");
     printf("3 - Disciplina\n");
+    printf("4 - Listagens\n");
     printf("Escolha uma opção: ");
     scanf("%d", &opcao);
     return opcao;
@@ -233,6 +234,18 @@ int excluirDisciplina(Disciplina listaDisciplina[], int qtdDisciplina) {
 
     return DISCIPLINA_INEXISTENTE;
 }
+//menu listagens
+int menuListagens() {
+    int opcao;
+    printf("\nMENU LISTAGENS \n");
+    printf("0 - Voltar\n");
+    printf("1 - Aniversariantes do mês\n");
+    printf("2 - Disciplinas com mais de 40 alunos\n");
+    printf("3 - Alunos matriculados em menos de 3 disciplinas\n");
+    printf("Escolha uma opção: ");
+    scanf("%d", &opcao);
+    return opcao;
+}
 
 // ===== FUNÇÃO PRINCIPAL =====
 
@@ -339,6 +352,30 @@ int main(void) {
                 }
                 break;
             }
+            
+            case 4: { // Listagens
+    int sairListagem = 0, opcaoListagem;
+    while (!sairListagem) {
+        opcaoListagem = menuListagens();
+        switch(opcaoListagem) {
+            case 0:
+                sairListagem = 1;
+                break;
+            case 1:
+           // fazer     listarAniversariantesDoMes
+                break;
+            case 2:
+             //   listarDisciplinasVagasExcedidas(listaDisciplina, qtdDisciplina, listaAluno, qtdAluno);
+                break;
+            case 3:
+          //      listarAlunosMenos3Disciplinas(listaAluno, qtdAluno, listaDisciplina, qtdDisciplina);
+                break;
+            default:
+                printf("Opção inválida!\n");
+        }
+    }
+    break;
+}
 
             default:
                 printf("Opção inválida!\n");
