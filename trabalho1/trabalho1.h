@@ -11,6 +11,7 @@
 //  Matrícula: 20251160023
 //  Semestre: 2 semestre
 // #################################################
+
 #ifndef TRABALHO1_H
 #define TRABALHO1_H
 
@@ -26,8 +27,10 @@ typedef struct {
 int validaData(int dia, int mes, int ano);
 DataQuebrada quebraData(char data[]);
 int q1(char data[]);
+
+// Protótipos 
 int somar(int a, int b);
 int fatorial(int n);
-
+// ... adicione aqui todos os protótipos de funções globais
 
 #endif // TRABALHO1_H
