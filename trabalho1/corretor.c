@@ -6,6 +6,7 @@
 //  Professor: Renato Novais - renato@ifba.edu.br
 //  Aluno: Aisha Azevedo Sampaio
 
+
 #include <stdio.h>
 #include <string.h>
 
@@ -68,4 +69,5 @@ void testQ1()
     strcpy(str, "/9/2014");
     printf("%d\n", q1(str) == 0);
 }
+
 
