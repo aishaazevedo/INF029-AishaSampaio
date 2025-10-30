@@ -10,27 +10,24 @@
 //  email: 20251160023@ifba.edu.br
 //  Matrícula: 20251160023
 //  Semestre: 2 semestre
-
 // #################################################
 #ifndef TRABALHO1_H
 #define TRABALHO1_H
-
-#ifndef TRABALHO1_H
-#define TRABALHO1_H
-
-#include <stdlib.h> 
 
 typedef struct {
     int iDia;
     int iMes;
     int iAno;
-    int valido; /
+    int valido; 
 } DataQuebrada;
 
-// Protótipos das funções
+
+// PROTÓTIPOS DE FUNÇÕES
 int validaData(int dia, int mes, int ano);
 DataQuebrada quebraData(char data[]);
-int q1(char data[]); // Função principal 
+int q1(char data[]);
+int somar(int a, int b);
+int fatorial(int n);
 
-#endif /* TRABALHO1_H */
 
+#endif // TRABALHO1_H
