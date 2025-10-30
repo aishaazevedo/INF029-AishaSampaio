@@ -12,20 +12,16 @@
 //  Semestre: 2 semestre
 // #################################################
 
-#include <stdio.h>    // Para printf/scanf (se houver) e outras funções de E/S
-#include <string.h>   // Para funções de string (strlen, etc.)
-#include <stdlib.h>   // <--- CORREÇÃO: Necessário para a função atoi()
-#include "trabalho1.h" // Seus protótipos e structs
+#include <stdio.h>    
+#include <string.h>  
+#include <stdlib.h>  
+#include "trabalho1.h" 
 
-// ... seu código de q1 e quebraData
-
-// Implementação da função somar (que estava faltando)
 int somar(int a, int b) {
     // Implemente a lógica de soma aqui. Exemplo:
     return a + b;
 }
 
-// Implementação da função fatorial (que estava faltando)
 int fatorial(int n) {
     // Implemente a lógica de fatorial aqui. Exemplo:
     if (n == 0)
@@ -38,7 +34,6 @@ int fatorial(int n) {
     return res;
 }
 
-// ... e assim por diante para quaisquer outras funções que o corretor.c exija
 
 //Questão1 
 
@@ -83,7 +78,7 @@ DataQuebrada quebraData(char data[]){
     
     dq.valido = 0; 
     
-    // --- Processa o Dia (sDia) ---
+    // --- Processa o Dia 
     i = 0;
     while (data[current_index] != '/' && data[current_index] != '\0') {
         sDia[i] = data[current_index];  
@@ -97,13 +92,12 @@ DataQuebrada quebraData(char data[]){
         return dq; 
     }
 
-    // Pula a barra '/' e verifica se a string não acabou
     if (data[current_index] != '/') {
         return dq; 
     }
     current_index++; 
 
-    // --- Processa o Mês (sMes) ---
+    // --- Processa o Mês 
     i = 0;
     while (data[current_index] != '/' && data[current_index] != '\0') {
         sMes[i] = data[current_index];
@@ -123,7 +117,7 @@ DataQuebrada quebraData(char data[]){
     current_index++; 
     
 
-    // --- Processa o Ano (sAno) ---
+    // --- Processa o Ano 
     i = 0;
     while(data[current_index] != '\0') {
         sAno[i] = data[current_index];
