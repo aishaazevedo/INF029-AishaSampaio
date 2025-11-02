@@ -4,15 +4,7 @@
 //  Curso de Análise e Desenvolvimento de Sistemas http://ads.ifba.edu.br
 //  Disciplina: INF029 - Laboratório de Programação
 //  Professor: Renato Novais - renato@ifba.edu.br
-//  Aluno: Aisha Azevedo Sampaio
 
-<<<<<<< HEAD
-#include <stdio.h>
-#include <string.h>
-
-//renomeie o arquivo do include abaixo para trabalho1.h
-#include "trabalho1.h"
-=======
 //  ----- Dados do Aluno -----
 //  Nome: Aisha Azevedo Sampaio
 //  email: 20251160023@ifba.edu.br
@@ -20,16 +12,20 @@
 //  Semestre: 2 semestre
 // #################################################
 
-#include <stdio.h>    
-#include <string.h>  
-#include <stdlib.h>  
-#include "trabalho1.h" 
+#include <stdio.h>    // Para printf/scanf (se houver) e outras funções de E/S
+#include <string.h>   // Para funções de string (strlen, etc.)
+#include <stdlib.h>   // <--- CORREÇÃO: Necessário para a função atoi()
+#include "trabalho1.h" // Seus protótipos e structs
 
+// ... seu código de q1 e quebraData
+
+// Implementação da função somar (que estava faltando)
 int somar(int a, int b) {
     // Implemente a lógica de soma aqui. Exemplo:
     return a + b;
 }
 
+// Implementação da função fatorial (que estava faltando)
 int fatorial(int n) {
     // Implemente a lógica de fatorial aqui. Exemplo:
     if (n == 0)
@@ -42,45 +38,40 @@ int fatorial(int n) {
     return res;
 }
 
+// ... e assim por diante para quaisquer outras funções que o corretor.c exija
 
 //Questão1 
->>>>>>> 4c6c284a3b782e4c8972d9549c4f9c08d865dba9
 
-void testSomar();    //função utilizada para testes
-void testFatorial(); //função utilizada para testes
-void testQ1();
-void testQ2();
-void testQ3();
-void testQ4();
-void testQ5();
-void testQ6();
-void testQ7();
+int validaData(int dia, int mes, int ano) {
+    int quantDias;
 
-int main()
-{
-    //testSomar();
-    //testFatorial();
-    testQ1();
-    /*testQ2();
-    testQ3();
-    testQ4();
-    testQ5();
-    testQ6();
-    testQ7();*/
+    if (mes < 1 || mes > 12) {
+        return 0; // Mês inválido
+    }
+
+    // Verifica Ano Bissexto
+    int bissexto = ((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0);
+
+    // quant. máxima de dias para o mês
+    if (mes == 2) {
+        quantDias = bissexto ? 29 : 28;
+    } 
+    else if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+        quantDias = 30;
+    } 
+    else {
+        quantDias = 31;
+    }
+
+    if (dia < 1 || dia > quantDias) {
+        return 0; 
+    }
+
+    return 1; 
 }
 
-void testSomar()
-{
-    printf("%d\n", somar(3, 4) == 7);
-    printf("%d\n", somar(-1, -3) == -4);
-    printf("%d\n", somar(-6, 6) == 0);
-    printf("%d\n", somar(74, 9) == 83);
-    printf("%d\n", somar(30, -9) == 21);
-    printf("%d\n", somar(-2, 8) == 6);
-    printf("%d\n", somar(1000, 99) == 1099);
+// FUNÇÃO Quebra da String de Data (dd/mm/aa ou d/m/aaaa)
 
-<<<<<<< HEAD
-=======
 DataQuebrada quebraData(char data[]){
     DataQuebrada dq;
     
@@ -92,7 +83,7 @@ DataQuebrada quebraData(char data[]){
     
     dq.valido = 0; 
     
-    // --- Processa o Dia 
+    // --- Processa o Dia (sDia) ---
     i = 0;
     while (data[current_index] != '/' && data[current_index] != '\0') {
         sDia[i] = data[current_index];  
@@ -106,12 +97,13 @@ DataQuebrada quebraData(char data[]){
         return dq; 
     }
 
+    // Pula a barra '/' e verifica se a string não acabou
     if (data[current_index] != '/') {
         return dq; 
     }
     current_index++; 
 
-    // --- Processa o Mês 
+    // --- Processa o Mês (sMes) ---
     i = 0;
     while (data[current_index] != '/' && data[current_index] != '\0') {
         sMes[i] = data[current_index];
@@ -131,7 +123,7 @@ DataQuebrada quebraData(char data[]){
     current_index++; 
     
 
-    // --- Processa o Ano 
+    // --- Processa o Ano (sAno) ---
     i = 0;
     while(data[current_index] != '\0') {
         sAno[i] = data[current_index];
@@ -153,28 +145,17 @@ DataQuebrada quebraData(char data[]){
     dq.valido = 1; // Quebra bem-sucedida!
     
     return dq;
->>>>>>> 4c6c284a3b782e4c8972d9549c4f9c08d865dba9
 }
+// Função Principal (q1)
 
-void testFatorial()
-{
-    printf("%d\n", fatorial(3) == 6);
-    printf("%d\n", fatorial(1) == 1);
-    printf("%d\n", fatorial(5) == 120);
+int q1(char data[]) {
+    // quebra a string de data
+    DataQuebrada data_processada = quebraData(data);
+    
+    if (!data_processada.valido) {
+        return 0;
+    }
+    
+    // Se a quebra foi bem-sucedida, chama a lógica de validação de calendário
+    return validaData(data_processada.iDia, data_processada.iMes, data_processada.iAno);
 }
-
-void testQ1()
-{
-    char str[11];
-    strcpy(str, "29/02/2015");
-    printf("%d\n", q1(str) == 0);
-    strcpy(str, "29/02/2012");
-    printf("%d\n", q1(str) == 1);
-    strcpy(str, "9/13/2014");
-    printf("%d\n", q1(str) == 0);
-    strcpy(str, "45/4/2014");
-    printf("%d\n", q1(str) == 0);
-    strcpy(str, "/9/2014");
-    printf("%d\n", q1(str) == 0);
-}
-
