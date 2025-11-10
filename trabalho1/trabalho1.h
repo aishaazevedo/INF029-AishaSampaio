@@ -14,20 +14,33 @@
 #ifndef TRABALHO1_H
 #define TRABALHO1_H
 
-typedef struct {
-    int iDia;
+typedef struct DQ
+{
+    int iDia; 
     int iMes;
     int iAno;
-    int valido; 
+    int valido; // 0 se inválido, e 1 se válido 
+
 } DataQuebrada;
 
+typedef struct Qtd
+{
+    int qtdDias;
+    int qtdMeses;
+    int qtdAnos;
+    int retorno;
 
-// PROTÓTIPOS DE FUNÇÕES
-int validaData(int dia, int mes, int ano);
-DataQuebrada quebraData(char data[]);
+} DiasMesesAnos;
+
+int somar(int x, int y); //função utilizada para testes
+int fatorial(int x); //função utilizada para testes
 int q1(char data[]);
-int somar(int a, int b);
-int fatorial(int n);
+DiasMesesAnos q2(char datainicial[], char datafinal[]);
+int q3(char *texto, char c, int isCaseSensitive);
+int q4(char *strTexto, char *strBusca, int posicoes[30]);
+int q5(int num);
+int q6(int numerobase, int numerobusca);
+int q7(char matriz[8][10], char palavra[5]);
+DataQuebrada quebraData(char data[]);
 
-
-#endif // TRABALHO1_H
+#endif  // MAIN_H
