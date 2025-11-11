@@ -103,7 +103,7 @@ int q1(char data[])
   if (dq.iMes <= 0 || dq.iMes > 12)
     datavalida = 0;
 
-  if (dq.iAno < 0 || dq.iAno > 9999)
+  if (dq.iAno < 0 || dq.iAno > 2025)
     datavalida = 0;
 
   int bissexto = ((dq.iAno % 4 == 0) && (dq.iAno % 100 != 0)) || (dq.iAno % 400 == 0);
@@ -128,8 +128,6 @@ int q1(char data[])
   else
     return 0;
 }
-
-
 
 /*
  Q2 = diferença entre duas datas
@@ -159,9 +157,31 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
       return dma;
     }else{
       //verifique se a data final não é menor que a data inicial
-      
-      //calcule a distancia entre as datas
+    DataQuebrada dqInicial = quebraData(datainicial);
+    DataQuebrada dqFinal = quebraData(datafinal);
 
+    if (!datafinalehmaior(dqInicial, dqFinal)) {
+        dma.retorno = 4;
+        return dma;
+    }
+      //calcule a distancia entre as datas
+    dma.qtdDias = dqFinal.iDia - dqInicial.iDia;
+    dma.qtdMeses = dqFinal.iMes - dqInicial.iMes;
+    dma.qtdAnos = dqFinal.iAno - dqInicial.iAno;
+
+    if (dma.qtdMeses < 0) {
+        dma.qtdMeses += 12;
+        dma.qtdAnos--;
+    }
+
+    if (dma.qtdDias < 0) {
+        if (dqFinal.iMes == 1) {
+            dma.qtdDias += diasNoMes(12, dqFinal.iAno - 1);
+        } else {
+            dma.qtdDias += diasNoMes(dqFinal.iMes - 1, dqFinal.iAno);
+        }
+        dma.qtdMeses--;
+    }
 
       //se tudo der certo
       dma.retorno = 1;
@@ -183,7 +203,23 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
  */
 int q3(char *texto, char c, int isCaseSensitive)
 {
-    int qtdOcorrencias = -1;
+    int qtdOcorrencias = 0;
+    configurar(texto); // criar
+    
+    if (isCaseSensitive != 1) { 
+        for (int i = 0; texto[i] != '\0'; i++) {
+            if (texto[i] == c || texto[i] == c - 32 || texto[i] == c + 32) {
+                qtdOcorrencias++;
+            }
+        }
+    }
+    else { 
+        for (int i = 0; texto[i] != '\0'; i++) {
+            if (texto[i] == c) {
+                qtdOcorrencias++;
+            }
+        }
+    }
 
     return qtdOcorrencias;
 }
@@ -222,6 +258,16 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
 
 int q5(int num)
 {
+    
+int invertido = 0;
+    int resto;
+    
+    while (num > 0){
+        resto = num % 10;
+        invertido = invertido * 10 + resto;
+        num = num/10;
+    }
+    num = invertido;
 
     return num;
 }
