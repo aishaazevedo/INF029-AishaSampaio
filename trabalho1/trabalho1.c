@@ -221,7 +221,11 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = 0;
+<<<<<<< HEAD
   //  configurar(texto); // criar
+=======
+    configurar(texto); // criar
+>>>>>>> 8a82b84c715482b857a9baa017ee38f68303225f
     
     if (isCaseSensitive != 1) { 
         for (int i = 0; texto[i] != '\0'; i++) {
