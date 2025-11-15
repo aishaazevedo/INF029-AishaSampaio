@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 DataQuebrada quebraData(char data[]);
+int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy);
 
 /*
 ## função utilizada para testes  ##
@@ -223,9 +224,6 @@ int q3(char *texto, char c, int isCaseSensitive)
     int qtdOcorrencias = 0;
 <<<<<<< HEAD
   //  configurar(texto); // criar
-=======
-    configurar(texto); // criar
->>>>>>> 8a82b84c715482b857a9baa017ee38f68303225f
     
     if (isCaseSensitive != 1) { 
         for (int i = 0; texto[i] != '\0'; i++) {
@@ -260,13 +258,28 @@ int q3(char *texto, char c, int isCaseSensitive)
         O retorno da função, n, nesse caso seria 1;
 
  */
-int q4(char *strTexto, char *strBusca, int posicoes[30])
-{
-    int qtdOcorrencias = -1;
+int q4(char *strTexto, char *strBusca, int posicoes[30]) {
+    int qtdOcorrencias = 0;
+    int tamBusca = strlen(strBusca);
+    int k = 0;
+
+    for (int i = 0; strTexto[i] != '\0'; i++) {
+        int j;
+        for (j = 0; j < tamBusca; j++) {
+            if (strTexto[i + j] != strBusca[j]) {
+                break;
+            }
+        }
+
+        if (j == tamBusca) {
+            posicoes[k++] = i + 1;         // início (índice começa em 1)
+            posicoes[k++] = i + tamBusca;  // fim
+            qtdOcorrencias++;
+        }
+    }
 
     return qtdOcorrencias;
 }
-
 /*
  Q5 = inverte número
  @objetivo
@@ -303,9 +316,29 @@ int invertido = 0;
     Quantidade de vezes que número de busca ocorre em número base
  */
 
-int q6(int numerobase, int numerobusca)
-{
-    int qtdOcorrencias;
+int q6(int numerobase, int numerobusca) {
+    char strBase[50], strBusca[50];
+    int qtdOcorrencias = 0;
+
+    // Converte os números para strings
+    sprintf(strBase, "%d", numerobase);
+    sprintf(strBusca, "%d", numerobusca);
+
+    int tamBusca = strlen(strBusca);
+
+    for (int i = 0; strBase[i] != '\0'; i++) {
+        int j;
+        for (j = 0; j < tamBusca; j++) {
+            if (strBase[i + j] != strBusca[j]) {
+                break;
+            }
+        }
+
+        if (j == tamBusca) {
+            qtdOcorrencias++;
+        }
+    }
+
     return qtdOcorrencias;
 }
 
@@ -319,11 +352,29 @@ int q6(int numerobase, int numerobusca)
     1 se achou 0 se não achou
  */
 
- int q7(char matriz[8][10], char palavra[5])
- {
-     int achou;
-     return achou;
- }
+ int q7(char matriz[8][10], char palavra[5]) {
+    configurar(palavra);
+
+    for (int i = 0; i < 8; i++) {
+        configurar(matriz[i]);
+    }
+
+    int direcoes[8][2] = {
+        {0, 1}, {0, -1}, {1, 0}, {-1, 0},
+        {1, 1}, {-1, -1}, {1, -1}, {-1, 1}
+    };
+
+    for (int linha = 0; linha < 8; linha++) {
+        for (int coluna = 0; coluna < 10; coluna++) {
+            for (int d = 0; d < 8; d++) {
+                if (buscarDirecao(matriz, linha, coluna, palavra, direcoes[d][0], direcoes[d][1]))
+                    return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 
 
@@ -383,4 +434,53 @@ DataQuebrada quebraData(char data[]){
 	dq.valido = 1;
     
   return dq;
+
+  int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy) {
+    int tamanho = strlen(palavra);
+
+    for (int i = 0; i < tamanho; i++) {
+        int x = linha + i * dx;
+        int y = coluna + i * dy;
+
+        if (x < 0 || x >= 8 || y < 0 || y >= 10)
+            return 0;
+
+        if (matriz[x][y] != palavra[i])
+            return 0;
+    }
+    return 1;
+}
+
+void configurar(char *texto) {
+    for (int i = 0; texto[i] != '\0'; i++) {
+        char c = texto[i];
+
+        if (c >= 'a' && c <= 'z') {
+            c = c - 32; // transforma minúscula em maiúscula
+        }
+
+        if (c == 'Á' || c == 'À' || c == 'Ã' || c == 'Â' ||
+            c == 'á' || c == 'à' || c == 'ã' || c == 'â') {
+            c = 'A';
+        }
+        else if (c == 'É' || c == 'Ê' || c == 'é' || c == 'ê') {
+            c = 'E';
+        }
+        else if (c == 'Í' || c == 'í') {
+            c = 'I';
+        }
+        else if (c == 'Ó' || c == 'Õ' || c == 'Ô' ||
+                 c == 'ó' || c == 'õ' || c == 'ô') {
+            c = 'O';
+        }
+        else if (c == 'Ú' || c == 'Ü' || c == 'ú' || c == 'ü') {
+            c = 'U';
+        }
+        else if (c == 'Ç' || c == 'ç') {
+            c = 'C';
+        }
+
+        texto[i] = c;
+    }
+}
 }

@@ -4,7 +4,6 @@
 //  Curso de Análise e Desenvolvimento de Sistemas http://ads.ifba.edu.br
 //  Disciplina: INF029 - Laboratório de Programação
 //  Professor: Renato Novais - renato@ifba.edu.br
-//  Aluno(a): Aisha Azevedo Sampaio
 
 //  ----- Orientações gerais -----
 //  Descrição: esse arquivo contém exemplos de testes das questões do trabalho.
@@ -38,10 +37,10 @@ int main()
     testQ1();
     testQ2();
     testQ3();
-    //testQ4();
+    testQ4();
     testQ5();
-   // testQ6();
-   // testQ7();*/
+    testQ6();
+    testQ7();
 }
 
 int ligado = 0;
@@ -127,7 +126,6 @@ void testQ2()
     strcpy(datafinal, "01/06/2015");
     dma = q2(datainicial, datafinal);
     printf("%d\n", dma.retorno == 4);
-}
 
     //teste 3
     qtdDias = -1;
@@ -154,7 +152,7 @@ void testQ3()
     printf("%d\n", q3(str, 'l', 0) == 1);
     printf("%d\n", q3(str, 'L', 0) == 1);
 }
-/*
+
 void testQ4()
 {
     show_log("testQ4()");
@@ -188,7 +186,7 @@ void testQ4()
     printf("%d\n", posicoes[4] == 52);
     printf("%d\n", posicoes[5] == 54);
 }
-*/
+
 void testQ5()
 {
     show_log("testQ5()");
@@ -197,7 +195,7 @@ void testQ5()
     printf("%d\n", q5(3) == 3);
     printf("%d\n", q5(5430) == 345);
 }
-/*
+
 void testQ6()
 {
     show_log("testQ6()");
@@ -230,5 +228,3 @@ void testQ7()
     printf("%d\n", q7(matrix, stringBusca) == 1);
 
 }
-
-*/
