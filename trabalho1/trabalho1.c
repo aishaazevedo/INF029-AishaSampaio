@@ -143,9 +143,26 @@ int q1(char data[])
     4 -> datainicial > datafinal
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
+int diasNoMes(int mes, int ano) {
+    // Retorno qualquer para o linker encontrar a função
+    return 30; 
+}
+
+//testando 
+int datafinalehmaior(DataQuebrada dqInicial, DataQuebrada dqFinal) {
+    // Retorna 1 (Verdadeiro) para o linker encontrar a função
+    return 1; 
+}
+
+void configurar(char *texto) {
+    // Corpo vazio
+}
+
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
 
+
+//testando
     //calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
 
@@ -204,7 +221,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = 0;
-    configurar(texto); // criar
+  //  configurar(texto); // criar
     
     if (isCaseSensitive != 1) { 
         for (int i = 0; texto[i] != '\0'; i++) {
