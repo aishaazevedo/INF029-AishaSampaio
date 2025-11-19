@@ -24,6 +24,7 @@
 #include "trabalho1.h" 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 DataQuebrada quebraData(char data[]);
 int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy);
