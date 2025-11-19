@@ -450,7 +450,7 @@ void configurar(char *texto) {
         if (c >= 'a' && c <= 'z') {
             texto[j++] = c - ('a' - 'A');
         }
-        else if (c == 0xC3) { // início de acento UTF-8
+        else if (c == 0xC3) { 
             unsigned char next = texto[i+1];
             switch (next) {
                 case 0xA1: case 0xA0: case 0xA3: case 0xA2: // á à ã â
@@ -468,15 +468,15 @@ void configurar(char *texto) {
                 case 0xA7: case 0x87: // ç Ç
                     texto[j++] = 'C'; break;
                 default:
-                    // ignora acento desconhecido
-                    texto[j++] = '?';
+                    break;
             }
-            i++; // pula o segundo byte
+            i++; 
         }
         else {
             texto[j++] = c;
         }
         i++;
     }
-    texto[j] = '\0';
+    texto[j] = '\0'; 
 }
+
