@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include "trabalho1.h" 
 #include <stdlib.h>
+#include <string.h>
 
 DataQuebrada quebraData(char data[]);
 int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy);
@@ -434,7 +435,7 @@ DataQuebrada quebraData(char data[]){
 	dq.valido = 1;
     
   return dq;
-
+}
   int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy) {
     int tamanho = strlen(palavra);
 
@@ -483,4 +484,4 @@ void configurar(char *texto) {
         texto[i] = c;
     }
 }
-}
+
