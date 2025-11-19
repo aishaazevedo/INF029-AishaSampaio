@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include "trabalho1.h" 
 #include <stdlib.h>
+#include <string.h>
 
 DataQuebrada quebraData(char data[]);
 int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy);
@@ -222,8 +223,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = 0;
-<<<<<<< HEAD
-  //  configurar(texto); // criar
+
     
     if (isCaseSensitive != 1) { 
         for (int i = 0; texto[i] != '\0'; i++) {
@@ -483,4 +483,4 @@ void configurar(char *texto) {
         texto[i] = c;
     }
 }
-}
+
