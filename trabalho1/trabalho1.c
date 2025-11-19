@@ -335,12 +335,11 @@ int q6(int numerobase, int numerobusca) {
                 break;
             }
         }
-
         if (j == tamBusca) {
             qtdOcorrencias++;
+           
         }
     }
-
     return qtdOcorrencias;
 }
 
@@ -358,6 +357,7 @@ int q6(int numerobase, int numerobusca) {
     configurar(palavra);
 
     for (int i = 0; i < 8; i++) {
+		matriz[i][9] = '\0';
         configurar(matriz[i]);
     }
 
@@ -380,62 +380,51 @@ int q6(int numerobase, int numerobusca) {
 
 
 
-DataQuebrada quebraData(char data[]){
-  DataQuebrada dq;
-  char sDia[3];
-	char sMes[3];
-	char sAno[5];
-	int i; 
+DataQuebrada quebraData(char data[]) {
+    DataQuebrada dq;
+    dq.valido = 0; // assume inválido até validar
 
-	for (i = 0; data[i] != '/'; i++){
-		sDia[i] = data[i];	
-	}
-	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
-		sDia[i] = '\0';  // coloca o barra zero no final
-	}else {
-		dq.valido = 0;
+    char sDia[3];
+    char sMes[3];
+    char sAno[5];
+    int i, j;
+
+    // --- Dia ---
+    for (i = 0; data[i] != '/' && i < 2; i++) {
+        sDia[i] = data[i];
+    }
+    if (data[i] != '/' || i < 1 || i > 2) return dq;
+    sDia[i] = '\0';
+
+    // --- Mês ---
+    j = i + 1; // pula a barra
+    i = 0;
+    for (; data[j] != '/' && i < 2; j++, i++) {
+        sMes[i] = data[j];
+    }
+    if (data[j] != '/' || i < 1 || i > 2) return dq;
+    sMes[i] = '\0';
+
+    // --- Ano ---
+    j = j + 1; // pula a barra
+    i = 0;
+    for (; data[j] != '\0' && i < 4; j++, i++) {
+        sAno[i] = data[j];
+    }
+    if (data[j] != '\0' || (i != 2 && i != 4)) return dq;
+    sAno[i] = '\0';
+
+    // --- Converte para números ---
+    dq.iDia = atoi(sDia);
+    dq.iMes = atoi(sMes);
+    dq.iAno = atoi(sAno);
+
+    // --- Validação simples ---
+    if (dq.iDia < 1 || dq.iDia > 31) return dq;
+    if (dq.iMes < 1 || dq.iMes > 12) return dq;
+
+    dq.valido = 1;
     return dq;
-  }  
-	
-
-	int j = i + 1; //anda 1 cada para pular a barra
-	i = 0;
-
-	for (; data[j] != '/'; j++){
-		sMes[i] = data[j];
-		i++;
-	}
-
-	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
-		sMes[i] = '\0';  // coloca o barra zero no final
-	}else {
-		dq.valido = 0;
-    return dq;
-  }
-	
-
-	j = j + 1; //anda 1 cada para pular a barra
-	i = 0;
-	
-	for(; data[j] != '\0'; j++){
-	 	sAno[i] = data[j];
-	 	i++;
-	}
-
-	if(i == 2 || i == 4){ // testa se tem 2 ou 4 digitos
-		sAno[i] = '\0';  // coloca o barra zero no final
-	}else {
-		dq.valido = 0;
-    return dq;
-  }
-
-  dq.iDia = atoi(sDia);
-  dq.iMes = atoi(sMes);
-  dq.iAno = atoi(sAno); 
-
-	dq.valido = 1;
-    
-  return dq;
 }
   int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy) {
     int tamanho = strlen(palavra);
@@ -454,35 +443,40 @@ DataQuebrada quebraData(char data[]){
 }
 
 void configurar(char *texto) {
-    for (int i = 0; texto[i] != '\0'; i++) {
-        char c = texto[i];
+    int i = 0, j = 0;
+    while (texto[i] != '\0') {
+        unsigned char c = texto[i];
 
         if (c >= 'a' && c <= 'z') {
-            c = c - 32; // transforma minúscula em maiúscula
+            texto[j++] = c - ('a' - 'A');
         }
-
-        if (c == 'Á' || c == 'À' || c == 'Ã' || c == 'Â' ||
-            c == 'á' || c == 'à' || c == 'ã' || c == 'â') {
-            c = 'A';
+        else if (c == 0xC3) { // início de acento UTF-8
+            unsigned char next = texto[i+1];
+            switch (next) {
+                case 0xA1: case 0xA0: case 0xA3: case 0xA2: // á à ã â
+                case 0x81: case 0x80: case 0x83: case 0x82: // Á À Ã Â
+                    texto[j++] = 'A'; break;
+                case 0xA9: case 0xAA: case 0x89: case 0x8A: // é ê É Ê
+                    texto[j++] = 'E'; break;
+                case 0xAD: case 0x8D: // í Í
+                    texto[j++] = 'I'; break;
+                case 0xB3: case 0xB5: case 0xB4: // ó õ ô
+                case 0x93: case 0x95: case 0x94: // Ó Õ Ô
+                    texto[j++] = 'O'; break;
+                case 0xBA: case 0xBC: case 0x9A: case 0x9C: // ú ü Ú Ü
+                    texto[j++] = 'U'; break;
+                case 0xA7: case 0x87: // ç Ç
+                    texto[j++] = 'C'; break;
+                default:
+                    // ignora acento desconhecido
+                    texto[j++] = '?';
+            }
+            i++; // pula o segundo byte
         }
-        else if (c == 'É' || c == 'Ê' || c == 'é' || c == 'ê') {
-            c = 'E';
+        else {
+            texto[j++] = c;
         }
-        else if (c == 'Í' || c == 'í') {
-            c = 'I';
-        }
-        else if (c == 'Ó' || c == 'Õ' || c == 'Ô' ||
-                 c == 'ó' || c == 'õ' || c == 'ô') {
-            c = 'O';
-        }
-        else if (c == 'Ú' || c == 'Ü' || c == 'ú' || c == 'ü') {
-            c = 'U';
-        }
-        else if (c == 'Ç' || c == 'ç') {
-            c = 'C';
-        }
-
-        texto[i] = c;
+        i++;
     }
+    texto[j] = '\0';
 }
-
