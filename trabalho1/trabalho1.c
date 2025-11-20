@@ -24,11 +24,10 @@
 #include "trabalho1.h" 
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 DataQuebrada quebraData(char data[]);
-int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy);
-
+int diasNoMes(int mes, int ano);
+int datafinalehmaior(DataQuebrada dqInicial, DataQuebrada dqFinal);
 /*
 ## função utilizada para testes  ##
 
@@ -164,8 +163,6 @@ void configurar(char *texto) {
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
 
-
-//testando
     //calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
 
@@ -224,8 +221,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = 0;
-<<<<<<< HEAD
-  //  configurar(texto); // criar
+
     
     if (isCaseSensitive != 1) { 
         for (int i = 0; texto[i] != '\0'; i++) {
@@ -260,28 +256,37 @@ int q3(char *texto, char c, int isCaseSensitive)
         O retorno da função, n, nesse caso seria 1;
 
  */
-int q4(char *strTexto, char *strBusca, int posicoes[30]) {
-    int qtdOcorrencias = 0;
-    int tamBusca = strlen(strBusca);
-    int k = 0;
+int q4(char *strTexto, char *strBusca, int posicoes[30])
+{
+  int qtdOcorrencias = 0;
+  int i, j, k = 0;
+  int Texto = strlen(strTexto);
+  int Busca = strlen(strBusca);
 
-    for (int i = 0; strTexto[i] != '\0'; i++) {
-        int j;
-        for (j = 0; j < tamBusca; j++) {
-            if (strTexto[i + j] != strBusca[j]) {
-                break;
-            }
-        }
+  for (i = 0; i <= Texto - Busca; i++)
+  {
+    int achou = 1;
 
-        if (j == tamBusca) {
-            posicoes[k++] = i + 1;         // início (índice começa em 1)
-            posicoes[k++] = i + tamBusca;  // fim
-            qtdOcorrencias++;
-        }
+    for (j = 0; j < Busca; j++)
+    {
+      if (strTexto[i + j] != strBusca[j])
+      {
+        achou = 0;
+        break;
+      }
     }
 
-    return qtdOcorrencias;
+    if (achou)
+    {
+      posicoes[k++] = i;                // posição inicial
+      posicoes[k++] = i + Busca - 1; // posição final
+      qtdOcorrencias++;
+    }
+  }
+
+  return qtdOcorrencias;
 }
+
 /*
  Q5 = inverte número
  @objetivo
@@ -318,26 +323,34 @@ int invertido = 0;
     Quantidade de vezes que número de busca ocorre em número base
  */
 
-int q6(int numerobase, int numerobusca) {
-    char strBase[50], strBusca[50];
+int q6(int numerobase, int numerobusca)
+{
     int qtdOcorrencias = 0;
+    int digitosBase[50];
+    int digitosBusca[50];
+    int tamBase = 0;
+    int Busca = 0;
 
-    // Converte os números para strings
-    sprintf(strBase, "%d", numerobase);
-    sprintf(strBusca, "%d", numerobusca);
+    tamBase = extrairNum(numerobase, digitosBase);
+    Busca = extrairNum(numerobusca, digitosBusca);
 
-    int tamBusca = strlen(strBusca);
+    if (Busca == 0 || Busca > tamBase) {
+        return 0;
+    }
 
-    for (int i = 0; strBase[i] != '\0'; i++) {
-        int j;
-        for (j = 0; j < tamBusca; j++) {
-            if (strBase[i + j] != strBusca[j]) {
+    for (int i = 0; i <= tamBase - Busca;) {
+        int encontrado = 1;
+        for (int j = 0; j < Busca; j++) {
+            if (digitosBase[i + j] != digitosBusca[j]) {
+                encontrado = 0;
                 break;
             }
         }
-        if (j == tamBusca) {
-            qtdOcorrencias++;
-           
+        if (encontrado) {
+            qtdOcorrencias++;   
+            i = i + Busca;
+        } else {
+            i++;
         }
     }
     return qtdOcorrencias;
@@ -353,130 +366,168 @@ int q6(int numerobase, int numerobusca) {
     1 se achou 0 se não achou
  */
 
- int q7(char matriz[8][10], char palavra[5]) {
-    configurar(palavra);
-
-    for (int i = 0; i < 8; i++) {
-		matriz[i][9] = '\0';
-        configurar(matriz[i]);
+  int q7(char matriz[8][10], char palavra[5])
+ {
+    int achou = 0;
+    int i, j, k, tam_p;
+    char invertido[5];
+    for (tam_p = 0; palavra[tam_p]; tam_p++);
+    for (i = tam_p - 1, j = 0; i >= 0; i--, j++) {
+        invertido[j] = palavra[i];
     }
-
-    int direcoes[8][2] = {
-        {0, 1}, {0, -1}, {1, 0}, {-1, 0},
-        {1, 1}, {-1, -1}, {1, -1}, {-1, 1}
-    };
-
-    for (int linha = 0; linha < 8; linha++) {
-        for (int coluna = 0; coluna < 10; coluna++) {
-            for (int d = 0; d < 8; d++) {
-                if (buscarDirecao(matriz, linha, coluna, palavra, direcoes[d][0], direcoes[d][1]))
-                    return 1;
-            }
-        }
-    }
-
-    return 0;
-}
-
-
-
-DataQuebrada quebraData(char data[]) {
-    DataQuebrada dq;
-    dq.valido = 0; // assume inválido até validar
-
-    char sDia[3];
-    char sMes[3];
-    char sAno[5];
-    int i, j;
-
-    // --- Dia ---
-    for (i = 0; data[i] != '/' && i < 2; i++) {
-        sDia[i] = data[i];
-    }
-    if (data[i] != '/' || i < 1 || i > 2) return dq;
-    sDia[i] = '\0';
-
-    // --- Mês ---
-    j = i + 1; // pula a barra
-    i = 0;
-    for (; data[j] != '/' && i < 2; j++, i++) {
-        sMes[i] = data[j];
-    }
-    if (data[j] != '/' || i < 1 || i > 2) return dq;
-    sMes[i] = '\0';
-
-    // --- Ano ---
-    j = j + 1; // pula a barra
-    i = 0;
-    for (; data[j] != '\0' && i < 4; j++, i++) {
-        sAno[i] = data[j];
-    }
-    if (data[j] != '\0' || (i != 2 && i != 4)) return dq;
-    sAno[i] = '\0';
-
-    // --- Converte para números ---
-    dq.iDia = atoi(sDia);
-    dq.iMes = atoi(sMes);
-    dq.iAno = atoi(sAno);
-
-    // --- Validação simples ---
-    if (dq.iDia < 1 || dq.iDia > 31) return dq;
-    if (dq.iMes < 1 || dq.iMes > 12) return dq;
-
-    dq.valido = 1;
-    return dq;
-}
-  int buscarDirecao(char matriz[8][10], int linha, int coluna, char palavra[5], int dx, int dy) {
-    int tamanho = strlen(palavra);
-
-    for (int i = 0; i < tamanho; i++) {
-        int x = linha + i * dx;
-        int y = coluna + i * dy;
-
-        if (x < 0 || x >= 8 || y < 0 || y >= 10)
-            return 0;
-
-        if (matriz[x][y] != palavra[i])
-            return 0;
-    }
-    return 1;
-}
-
-void configurar(char *texto) {
-    int i = 0, j = 0;
-    while (texto[i] != '\0') {
-        unsigned char c = texto[i];
-
-        if (c >= 'a' && c <= 'z') {
-            texto[j++] = c - ('a' - 'A');
-        }
-        else if (c == 0xC3) { 
-            unsigned char next = texto[i+1];
-            switch (next) {
-                case 0xA1: case 0xA0: case 0xA3: case 0xA2: // á à ã â
-                case 0x81: case 0x80: case 0x83: case 0x82: // Á À Ã Â
-                    texto[j++] = 'A'; break;
-                case 0xA9: case 0xAA: case 0x89: case 0x8A: // é ê É Ê
-                    texto[j++] = 'E'; break;
-                case 0xAD: case 0x8D: // í Í
-                    texto[j++] = 'I'; break;
-                case 0xB3: case 0xB5: case 0xB4: // ó õ ô
-                case 0x93: case 0x95: case 0x94: // Ó Õ Ô
-                    texto[j++] = 'O'; break;
-                case 0xBA: case 0xBC: case 0x9A: case 0x9C: // ú ü Ú Ü
-                    texto[j++] = 'U'; break;
-                case 0xA7: case 0x87: // ç Ç
-                    texto[j++] = 'C'; break;
-                default:
+    // sentido horizontal para frente e para trás
+    for (i = 0; i < 8 && !achou; i++) {
+        for (j = 0; j < 10 - tam_p + 1 && !achou; j++) {
+            for (k = 0; k < tam_p; k++) {
+                if (matriz[i][j + k] != palavra[k] && matriz[i][j + k] != invertido[k]) {
                     break;
+                }
             }
-            i++; 
+            if (k == tam_p)
+                achou = 1;
         }
-        else {
-            texto[j++] = c;
-        }
-        i++;
     }
-    texto[j] = '\0'; 
-}
+    // sentido vertical para cima e para baixo
+    for (i = 0; i < 10 && !achou; i++) {
+        for (j = 0; j < 8 - tam_p + 1 && !achou; j++) {
+            for (k = 0; k < tam_p; k++) {
+                if (matriz[j + k][i] != palavra[k] && matriz[j + k][i] != invertido[k]) {
+                    break;
+                }
+            }
+            if (k == tam_p)
+                achou = 1;
+        }
+    }
+    // diagonal
+    for (int l = 0; l < 8 - tam_p && !achou; l++) {
+        for (int c = 0; c < 10 - tam_p && !achou; c++) {
+            for (i = l; i < 8 - tam_p + 1 && !achou; i++) {
+                for (j = c; j < 10 - tam_p + 1 && !achou; j++) {
+                    for (k = 0; k < tam_p && j + k < 10; k++) {
+                        if (matriz[i + k][j + k] != palavra[k] && matriz[i + k][j + k] != invertido[k])
+                            break;
+                    }
+                    if (k == tam_p)
+                        achou = 1;
+                }
+            }
+        }
+    }
+    for (int l = 0; l < 8 - tam_p && !achou; l++) {
+        for (int c = 10 - 1; c >= 0 && !achou; c--) {
+            for (i = l; i < 8 - tam_p + 1 && !achou; i++) {
+                for (j = c; j >= 0 && !achou; j--) {
+                    for (k = 0; k < tam_p; k++) {
+                        if (matriz[i + k][j - k] != palavra[k] && matriz[i + k][j - k] != invertido[k])
+                            break;
+                    }
+                    if (k == tam_p)
+                        achou = 1;
+                }
+            }
+        }
+    }
+     return achou;
+ }
 
+
+
+
+DataQuebrada quebraData(char data[]){
+  DataQuebrada dq;
+  char sDia[3];
+	char sMes[3];
+	char sAno[5];
+	int i; 
+
+	for (i = 0; data[i] != '/'; i++){
+		sDia[i] = data[i];	
+	}
+	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
+		sDia[i] = '\0';  // coloca o barra zero no final
+	}else {
+		dq.valido = 0;
+    return dq;
+  }  
+	
+
+	int j = i + 1; //anda 1 cada para pular a barra
+	i = 0;
+
+	for (; data[j] != '/'; j++){
+		sMes[i] = data[j];
+		i++;
+	}
+
+	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
+		sMes[i] = '\0';  // coloca o barra zero no final
+	}else {
+		dq.valido = 0;
+    return dq;
+  }
+	
+
+	j = j + 1; //anda 1 cada para pular a barra
+	i = 0;
+	
+	for(; data[j] != '\0'; j++){
+	 	sAno[i] = data[j];
+	 	i++;
+	}
+
+	if(i == 2 || i == 4){ // testa se tem 2 ou 4 digitos
+		sAno[i] = '\0';  // coloca o barra zero no final
+	}else {
+		dq.valido = 0;
+    return dq;
+  }
+
+  dq.iDia = atoi(sDia);
+  dq.iMes = atoi(sMes);
+  dq.iAno = atoi(sAno); 
+
+	dq.valido = 1;
+    
+  return dq;
+}
+int extrairNum(int num, int* entrada) {
+    int tempEntrada[50];
+    int count = 0;
+
+    if (num == 0) {
+        entrada[0] = 0;
+        return 1;
+    }
+
+    while (num > 0) {
+        tempEntrada[count] = (int)(num % 10);
+        num = num / 10;
+        count++;
+    }
+
+    for (int i = 0; i < count; i++) {
+        entrada[i] = tempEntrada[count - 1 - i];
+    }
+
+    return count;
+}
+ void tratarString(char *texto) {
+    int i, j, tam;
+    char com_acento[] = "ÄÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛÙüúûù";
+    char sem_acento[] = "AAAAAAAAAAaaaaaaaaaaEEEEEEEEeeeeeeeeIIIIIIIIiiiiiiiiOOOOOOOOOOooooooooooUUUUUUUUuuuuuuuu";
+    for(tam = 0; texto[tam] != '\0'; tam++);
+    for(i = 0; texto[i] != '\0'; i++){
+        for(j = 0; com_acento[j] != '\0'; j++) {
+            if(texto[i] == com_acento[j] && texto[i+1] == com_acento[j+1]) {
+                texto[i] = sem_acento[j];
+                for (int k = i + 1; k < tam - 1; k++) {
+                    texto[k] = texto[k+1];
+                }
+                texto[tam - 1] = '\0';
+                tam--;
+                break;
+            }
+        }
+    }
+}
