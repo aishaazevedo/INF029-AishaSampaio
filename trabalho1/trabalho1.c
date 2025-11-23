@@ -28,6 +28,8 @@
 DataQuebrada quebraData(char data[]);
 int diasNoMes(int mes, int ano);
 int datafinalehmaior(DataQuebrada dqInicial, DataQuebrada dqFinal);
+void configurar(char *texto);
+int extrairNum(int num, int* entrada);
 /*
 ## função utilizada para testes  ##
 
@@ -151,14 +153,20 @@ int diasNoMes(int mes, int ano) {
 }
 
 //testando 
-int datafinalehmaior(DataQuebrada dqInicial, DataQuebrada dqFinal) {
-    // Retorna 1 (Verdadeiro) para o linker encontrar a função
-    return 1; 
+int datafinalehmaior(DataQuebrada dqInicial, DataQuebrada dqFinal)
+{
+    if (dqFinal.iAno > dqInicial.iAno) return 1;
+    if (dqFinal.iAno < dqInicial.iAno) return 0;
+
+    // Anos iguais
+    if (dqFinal.iMes > dqInicial.iMes) return 1;
+    if (dqFinal.iMes < dqInicial.iMes) return 0;
+
+    // Meses iguais
+    if (dqFinal.iDia >= dqInicial.iDia) return 1;
+    return 0;
 }
 
-void configurar(char *texto) {
-    // Corpo vazio
-}
 
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
@@ -258,33 +266,28 @@ int q3(char *texto, char c, int isCaseSensitive)
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-  int qtdOcorrencias = 0;
-  int i, j, k = 0;
-  int Texto = strlen(strTexto);
-  int Busca = strlen(strBusca);
+    int qtdOcorrencias = 0;
+    int i, j, k, tamanho;
 
-  for (i = 0; i <= Texto - Busca; i++)
-  {
-    int achou = 1;
+    configurar(strTexto);
+    configurar(strBusca);
 
-    for (j = 0; j < Busca; j++)
-    {
-      if (strTexto[i + j] != strBusca[j])
-      {
-        achou = 0;
-        break;
-      }
+    for (tamanho = 0; strBusca[tamanho]; tamanho++);
+    for (i = 0, k = 0; strTexto[i] != '\0'; i++) {
+        for (j = 0; strBusca[j] != '\0'; j++) {
+            if (strTexto[i + j] != strBusca[j]) {
+                break;
+            }
+        }
+
+        if (tamanho == j) {
+            posicoes[k++] = i + 1;
+            posicoes[k++] = i + tamanho;
+            qtdOcorrencias++;
+            i++;
+        }
     }
-
-    if (achou)
-    {
-      posicoes[k++] = i;                // posição inicial
-      posicoes[k++] = i + Busca - 1; // posição final
-      qtdOcorrencias++;
-    }
-  }
-
-  return qtdOcorrencias;
+    return qtdOcorrencias;
 }
 
 /*
@@ -431,9 +434,6 @@ int q6(int numerobase, int numerobusca)
      return achou;
  }
 
-
-
-
 DataQuebrada quebraData(char data[]){
   DataQuebrada dq;
   char sDia[3];
@@ -512,7 +512,7 @@ int extrairNum(int num, int* entrada) {
 
     return count;
 }
- void tratarString(char *texto) {
+ void configurar(char *texto) {
     int i, j, tam;
     char com_acento[] = "ÄÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛÙüúûù";
     char sem_acento[] = "AAAAAAAAAAaaaaaaaaaaEEEEEEEEeeeeeeeeIIIIIIIIiiiiiiiiOOOOOOOOOOooooooooooUUUUUUUUuuuuuuuu";
